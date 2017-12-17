@@ -28,7 +28,7 @@ mixins: [TimerMixin];
                 { title: 'Item1', date: '21.04.2016', url: this.defaultImage },
                 { title: 'Item2', date: '22.07.2015', url: this.defaultImage }
             ]),
-            counter:0,
+            currentImage:0,
             totalImages:0
         };
         this.state.onlyurls = new Array();
@@ -40,7 +40,7 @@ mixins: [TimerMixin];
         const url = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1';
         console.log("xxxxxxxx" , "about to start");
         this.setState({
-                            counter:0,
+                            currentImage:0,
                             totalImages:0
                         });
         fetch(url).then((response) => {
@@ -88,12 +88,11 @@ mixins: [TimerMixin];
 componentDidMount() {
 
     this.interval = setInterval(() => {
-        result = this.state.counter + 1;
+        result = this.state.currentImage + 1;
         
         if(this.state.onlyurls.length == 0)
         {
             console.log("xxxxxxxx" , "resetting");
-            this.ResetData();
             this.FetchData();
         }
         else
@@ -102,7 +101,7 @@ componentDidMount() {
             var onlyurls = this.state.onlyurls;
             onlyurls.splice(0, 1);
             this.setState({
-                counter:result,
+                currentImage:result,
                 onlyurls:onlyurls
             });
        }
@@ -123,7 +122,7 @@ componentDidMount() {
         return (
             <View style={styles.mycontainer}>
                 <Text style={{ margin: 8 }}>{this.props.title}</Text>
-                <Text style={{ margin: 8 }}>{this.state.counter}/{this.state.totalImages}</Text>
+                <Text style={{ margin: 8 }}>{this.state.currentImage}/{this.state.totalImages}</Text>
                  <Image source={{
                     uri: this.state.onlyurls[0]
                 }}
