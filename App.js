@@ -6,14 +6,14 @@ import {
   View
 } from 'react-native';
 
+import Feed from './Components/FlickrRandom';
+
 
 export default class autoalbum extends Component<{}> {
   render() {
     return (
       <View>
-        <Text >
-          Welcome to React Native!
-        </Text>
+          <Feed/>
       </View>
     );
   }
