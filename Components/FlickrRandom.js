@@ -53,7 +53,6 @@ mixins: [TimerMixin];
                         var val=  { title: item.author.split(' ')[0], date: item.published, url: item.media.m };
                         var url = item.media.m;
                         this.state.onlyurls.push(url);
-                        console.log("...url,,,,,=start", url);
                         return val;
                     })
                 )
@@ -61,14 +60,7 @@ mixins: [TimerMixin];
             .catch((error) => console.log('Error' + error))
             .done();
     }
-    
-    
-    /*componentDidUpdate(prevProps, prevState) {
-   this.setTimeout(
-      () => { console.log('I do not leak!'); },
-      5000
-    );
-  }*/
+
   
 
 componentDidMount() {
@@ -77,24 +69,13 @@ componentDidMount() {
         result = this.state.counter + 1;
         
         var array = this.state.dataSource;
-        console.log(".......before xxxxx");
-        console.log(array);
-        console.log(".......before crash");
-        //console.log(this.state.onlyurls);
-        //array.splice(0, 1);
-        var arrayLength = this.state.onlyurls.length;
-        console.log("...url,,,,,=start");
-        for (var i = 0; i < arrayLength; i++) {
-            console.log("...url,,,,,=", this.state.onlyurls[i]);
-        }
-        console.log("...url,,,,,=end");
         
-         var onlyurls = this.state.onlyurls;
+        var arrayLength = this.state.onlyurls.length;
+        var onlyurls = this.state.onlyurls;
          onlyurls.splice(0, 1);
 
     
        this.setState({
-          //dataSource: array,
            counter:result,
            onlyurls:onlyurls
        });
@@ -108,7 +89,6 @@ componentDidMount() {
 
     
     componentWillUnmount() {
-    //timer.clearTimeout(this);
     }
 
 
@@ -126,11 +106,6 @@ componentDidMount() {
                    width: 200,
                    height: 200
                }}/>
-                <ListView
-                   scrollEnabled={false}
-                    dataSource={this.state.dataSource}
-                    renderRow={(rowData) => <Item flickrItem={rowData}/>}
-                />
             </View>);
     }
     
