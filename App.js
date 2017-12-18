@@ -13,7 +13,7 @@ export default class autoalbum extends Component<{}> {
   render() {
     return (
       <View>
-          <FlickrRandom timerInterval={1000}/>
+          <FlickrRandom timerInterval={1000} verbose={true}/>
       </View>
     );
   }

@@ -13,17 +13,23 @@ import TimerMixin from 'react-timer-mixin';
 
 global.defaultTimerInterval = 5000;
 
+global.defaultIsVerbose = false;
+
 export default class FlickrRandom extends Component {
     mixins: [TimerMixin];
     defaultImage = 'http://www.bugaga.ru/uploads/posts/2012-09/1348745110_3d-art-narndt-9.jpg';
     
     ResetData(props)
     {
-        //console.log("xxxxxxxx" , "data is reset");
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         var timerInterval = global.defaultTimerInterval;
-        if(props.timerInterval != 0)
+         if(props.timerInterval != 0)
             timerInterval = props.timerInterval;
+            
+        var isVerbose = global.defaultIsVerbose;
+         if(props.verbose == true)
+            isVerbose = true;
+       
         this.state = {
             dataSource: ds.cloneWithRows([
                 { title: 'Item1', date: '21.04.2016', url: this.defaultImage },
@@ -31,7 +37,8 @@ export default class FlickrRandom extends Component {
             ]),
             currentImage:0,
             totalImages:0,
-            timerInterval: timerInterval
+            timerInterval: timerInterval,
+            isVerbose: isVerbose
         };
         this.state.onlyurls = new Array();
     }
@@ -110,13 +117,12 @@ componentDidMount() {
 
     componentWillUnmount() {
     }
-
-
-    render() {
+    
+    
+    renderNormal()
+    {
          return (
             <View style={styles.mycontainer}>
-                <Text style={{ margin: 8 }}>{this.props.title}</Text>
-                <Text style={{ margin: 8 }}>{this.state.currentImage}/{this.state.totalImages}</Text>
                  <Image source={{
                     uri: this.state.onlyurls[0]
                 }}
@@ -128,14 +134,39 @@ componentDidMount() {
             </View>);
     }
     
+     renderVerbose()
+    {
+         return (
+            <View style={styles.mycontainer}>
+                     <Image source={{
+                    uri: this.state.onlyurls[0]
+                }}
+               style={{
+                   marginTop: 16,
+                   width: 200,
+                   height: 200
+               }}/>
+               <Text style={{ margin: 8 }}>{this.props.title}</Text>
+                <Text style={{ margin: 8 }}>{this.state.currentImage}/{this.state.totalImages}</Text>
+
+            </View>);
+    }
+    
+render() {
+        if(this.state.isVerbose)
+            return this.renderVerbose();
+        return this.renderNormal();
   }
+}
   
   
-   const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   mycontainer: {
     height: 350,
     justifyContent: 'center',
     alignItems: 'center',
+     padding:10,
+     borderColor:'black'
   }
 });
 
