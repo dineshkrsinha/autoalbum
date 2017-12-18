@@ -3,11 +3,11 @@ This code containes a React Native component - Compoments/FlickrRandom.js . This
 There is also a test application that demonstrates the usage of this component.
 
 ##**Usage of test application**
-*Download the code from git*
-*npm install*
-react-native start
-react-native run-ios (for ios)
-or react-native run-android (for android)
+Download the code from git  
+npm install  
+react-native start  
+react-native run-ios (for ios)  
+or react-native run-android (for android)  
 
 ##**Usage of FlickrRandom component**
 To use the FlickrRandom component, make sure to place it in the right folder.
