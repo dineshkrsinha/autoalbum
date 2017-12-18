@@ -6,6 +6,7 @@ import {
   ListView,
   Dimensions,
   StyleSheet,
+  Set,
   Image
 } from 'react-native';
 const timer = require('react-native-timer');
@@ -14,6 +15,10 @@ import TimerMixin from 'react-timer-mixin';
 global.defaultTimerInterval = 5000;
 
 global.defaultIsVerbose = false;
+
+global.test = false;
+
+global.url  = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1';
 
 export default class FlickrRandom extends Component {
     mixins: [TimerMixin];
@@ -29,6 +34,10 @@ export default class FlickrRandom extends Component {
         var isVerbose = global.defaultIsVerbose;
          if(props.verbose == true)
             isVerbose = true;
+            
+        var isTest = global.test;
+         if(props.test == true)
+            isTest = true;
        
         this.state = {
             dataSource: ds.cloneWithRows([
@@ -38,7 +47,8 @@ export default class FlickrRandom extends Component {
             currentImage:0,
             totalImages:0,
             timerInterval: timerInterval,
-            isVerbose: isVerbose
+            isVerbose: isVerbose,
+            isTest: isTest
         };
         this.state.onlyurls = new Array();
     }
@@ -46,7 +56,9 @@ export default class FlickrRandom extends Component {
     FetchData()
     {
         const that = this;
-        const url = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1';
+        const url = global.url ;
+        
+        
         this.setState({
                             currentImage:0,
                             totalImages:0
@@ -88,7 +100,14 @@ export default class FlickrRandom extends Component {
     
 
     componentWillMount() {
-       this.FetchData();
+        if(!this.state.isTest)
+            this.FetchData();
+        else
+        {
+            this.TestInvalidLink();
+            this.TestUniqueness();
+            this.TestPerfomance();
+        }
     }
 
   
@@ -156,6 +175,54 @@ render() {
         if(this.state.isVerbose)
             return this.renderVerbose();
         return this.renderNormal();
+  }
+  
+  
+  TestInvalidLink()
+  {
+       global.url  = 'http://www.google.com';
+       this.FetchData();
+        global.url  = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1';
+       
+  }
+  
+  TestUniqueness()
+  {
+       /*this.FetchData();
+       var uriSet = new Set();
+       var arrayLength = this.state.onlyurls.length;
+       for ( var i = 0; i < arrayLength; ++i)
+      {
+        var s = this.state.onlyurls[i];
+        if(uriSet.has(s))
+        {
+            console.log("...***.... TestUniqueness failed");
+            return false;
+        }
+        uriSet.add(s);
+    }*/
+  }
+  
+  
+  TestWeirdData()
+  {
+    //set the rest response from our private server to return very weird data 
+    //eg very log strings for url as well as null value.
+  }
+  
+  TestBandwidth()
+  {
+    //set bandwidth and see if hte performance is good
+    //fetch data and see the time interval for the network state is within the success interval
+     //FetchData();
+  }
+  
+  TestPerfomance()
+  {
+    //note time
+     //FetchData();
+     //note time
+     //see if the interval is below a set value
   }
 }
   
