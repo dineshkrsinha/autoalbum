@@ -3,8 +3,8 @@ This code containes a React Native component - Compoments/FlickrRandom.js . This
 There is also a test application that demonstrates the usage of this component.
 
 ##**Usage of test application**
-Download the code from git
-npm install
+*Download the code from git*
+*npm install*
 react-native start
 react-native run-ios (for ios)
 or react-native run-android (for android)
@@ -15,7 +15,7 @@ Link it from the calling component - eg import FlickrRandom from './Components/F
 Call the component.
 
 ##**Parameters of FlickrRandom component**
-All parameters are optional
+All parameters are optional.
 timerInterval - value in millseconds. Default value 5000. This value controls the interval for switching images
 verbose=default is false. This value controls if extra information is displayed for debugging purpose
 test=default is false. Ran the test cases.
