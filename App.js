@@ -6,14 +6,14 @@ import {
   View
 } from 'react-native';
 
-import Feed from './Components/FlickrRandom';
+import FlickrRandom from './Components/FlickrRandom';
 
 
 export default class autoalbum extends Component<{}> {
   render() {
     return (
       <View>
-          <Feed/>
+          <FlickrRandom timerInterval={1000}/>
       </View>
     );
   }
