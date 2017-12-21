@@ -116,7 +116,7 @@ componentDidMount() {
 
     this.interval = setInterval(() => {
         result = this.state.currentImage + 1;
-        if(this.state.onlyurls.length == 0)
+        if(this.state.onlyurls.length <=  1)
         {
             //console.log("xxxxxxxx" , "resetting");
             this.FetchData();
