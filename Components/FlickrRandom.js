@@ -24,6 +24,7 @@ export default class FlickrRandom extends Component {
     mixins: [TimerMixin];
     defaultImage = 'http://www.bugaga.ru/uploads/posts/2012-09/1348745110_3d-art-narndt-9.jpg';
     
+   
     ResetData(props)
     {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -48,12 +49,15 @@ export default class FlickrRandom extends Component {
             totalImages:0,
             timerInterval: timerInterval,
             isVerbose: isVerbose,
-            isTest: isTest
+          isTest: isTest,
+             testName:"Start test",
+             testResult:"starting"
         };
+        
         this.state.onlyurls = new Array();
     }
     
-    FetchData()
+    FetchData(callback)
     {
         const that = this;
         const url = global.url ;
@@ -64,7 +68,7 @@ export default class FlickrRandom extends Component {
                             totalImages:0
                         });
         fetch(url).then((response) => {
-            //console.log(response._bodyInit);
+            //console.log("FetchData-", response._bodyInit);
             return JSON.parse(response._bodyInit);
         })
             .then((responseJson) => responseJson.items)
@@ -75,7 +79,6 @@ export default class FlickrRandom extends Component {
                         var val=  { title: item.author.split(' ')[0], date: item.published, url: item.media.m };
                         var url = item.media.m;
                         this.state.onlyurls.push(url);
-                        //console.log("xxxxxxxx" , item.media.m, " and array length=", this.state.onlyurls.length);
                         ++this.state.totalImages;
                         onlyurls = this.state.onlyurls;
                         totalImages = this.state.totalImages;
@@ -83,13 +86,18 @@ export default class FlickrRandom extends Component {
                             totalImages:totalImages,
                             onlyurls:onlyurls
                         });
-                        
                         return val;
                     })
                 )
             }))
             .catch((error) => console.log('Error' + error))
-            .done();
+            .done(function(){
+                if(callback)
+                    callback(that);
+                else
+                    console.log("FetchData-" , "no callback");
+                });
+            
     }
 
     constructor(props) {
@@ -101,7 +109,7 @@ export default class FlickrRandom extends Component {
 
     componentWillMount() {
         if(!this.state.isTest)
-            this.FetchData();
+            this.FetchData(null);
         else
         {
             this.TestInvalidLink();
@@ -113,13 +121,15 @@ export default class FlickrRandom extends Component {
   
 
 componentDidMount() {
-
+     if(this.state.isTest)
+         return;
     this.interval = setInterval(() => {
+        if(this.state.isTest)
+            clearInterval(this.interval );
         result = this.state.currentImage + 1;
         if(this.state.onlyurls.length <=  1)
         {
-            //console.log("xxxxxxxx" , "resetting");
-            this.FetchData();
+            this.FetchData(null);
         }
         else
         {
@@ -171,37 +181,88 @@ componentDidMount() {
             </View>);
     }
     
+    
+    renderTest()
+    {
+         return (
+            <View style={styles.mycontainer}>
+                     <Image source={{
+                    uri: this.state.onlyurls[0]
+                }}
+               style={{
+                   marginTop: 16,
+                   width: 200,
+                   height: 200
+               }}/>
+               <Text style={{ margin: 8 }}>{this.props.title}</Text>
+                <Text style={{ margin: 8 }}>cC={this.state.currentImage}/{this.state.totalImages}</Text>
+                 <Text style={{ margin: 8 }}>Test = {this.state.testName}, result={this.state.testResult}</Text>
+
+            </View>);
+    }
+    
 render() {
         if(this.state.isVerbose)
             return this.renderVerbose();
+        if(this.state.isTest)
+            return this.renderTest();
         return this.renderNormal();
   }
   
   
+ SetTestParas(testName, testResult)
+  {
+    this.setState({
+                            testName:testName,
+                            testResult:testResult
+                        });
+    this.forceUpdate();
+ }
+
+  
   TestInvalidLink()
   {
+       this.SetTestParas("TestInvalidLink", "running");
+       this.state.onlyurls = new Array();
        global.url  = 'http://www.google.com';
-       this.FetchData();
+       this.FetchData(null);
         global.url  = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1';
+        console.log("Unittest-", "TestInvalidLink-", "result=", (this.state.onlyurls.length == 0));
+         this.SetTestParas("TestInvalidLink", "success");
        
   }
   
   TestUniqueness()
   {
-       /*this.FetchData();
-       var uriSet = new Set();
-       var arrayLength = this.state.onlyurls.length;
+       this.SetTestParas("TestUniqueness", "running");
+       this.state.onlyurls = new Array();
+       this.FetchData(this.OnTestUniqueness);
+        
+  }
+  
+  
+  OnTestUniqueness(that)
+  {
+        
+       var result = true;
+       var state = that.state;
+       var map = new Object();
+       var arrayLength = state.onlyurls.length;
+       console.log("Unittest-", "TestUniqueness-", "result=", (arrayLength));
        for ( var i = 0; i < arrayLength; ++i)
       {
-        var s = this.state.onlyurls[i];
-        if(uriSet.has(s))
+        var s = state.onlyurls[i];
+        if(map[s])
         {
             console.log("...***.... TestUniqueness failed");
-            return false;
+            result =  false;
+            break;
         }
-        uriSet.add(s);
-    }*/
-  }
+        map[s]  = s;
+    }
+     console.log("Unittest-", "TestUniqueness-", "result=", (result == true));
+    that.SetTestParas("TestUniqueness", "complete");
+}
   
   
   TestWeirdData()
