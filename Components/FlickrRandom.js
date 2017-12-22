@@ -57,7 +57,7 @@ export default class FlickrRandom extends Component {
         this.state.onlyurls = new Array();
     }
     
-    FetchData(callback)
+    FetchData(callback, mutatedata)
     {
         const that = this;
         const url = global.url ;
@@ -68,7 +68,12 @@ export default class FlickrRandom extends Component {
                             totalImages:0
                         });
         fetch(url).then((response) => {
-            //console.log("FetchData-", response._bodyInit);
+            console.log("FetchData-", response._bodyInit);
+            if(mutatedata)
+            {
+                mutatedata(response);
+                console.log("FetchData-", response._bodyInit);
+            }
             return JSON.parse(response._bodyInit);
         })
             .then((responseJson) => responseJson.items)
@@ -114,7 +119,7 @@ export default class FlickrRandom extends Component {
         {
             this.TestInvalidLink();
             this.TestUniqueness();
-            this.TestPerfomance();
+            this.TestWeirdData();
         }
     }
 
@@ -265,11 +270,28 @@ render() {
 }
   
   
+MakeDataWeird(data)
+{
+    data.replace("www.flickr.com", "www1234567890.234567890234567890234567890234567890234567890234567890234567890234567890234567890234567890.com");
+}
+
   TestWeirdData()
   {
-    //set the rest response from our private server to return very weird data 
-    //eg very log strings for url as well as null value.
+     this.SetTestParas("TestWeirdData", "running");
+       this.state.onlyurls = new Array();
+       this.FetchData(this.OnTestWeirdData, this.MakeDataWeird);
   }
+  
+  OnTestWeirdData(that)
+  {
+        
+       var result = true;
+       var state = that.state;
+        if(state.onlyurls.length != 20)
+           result = false;
+       console.log("Unittest-", "TestWeirdData-", "result=", (result));      
+      that.SetTestParas("TestWeirdData", "complete");
+}
   
   TestBandwidth()
   {
