@@ -13,9 +13,7 @@ global.defaultTimerInterval = 5000;
 global.defaultIsVerbose = false;
 global.test = false;
 
-export default class FlickrRandom extends Component {
-       
-     
+export default class FlickrRandom extends Component { 
     constructor(props) {
         super(props);
         var timerInterval = global.defaultTimerInterval;

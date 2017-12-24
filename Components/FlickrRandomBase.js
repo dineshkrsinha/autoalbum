@@ -105,7 +105,6 @@ export default class FlickrRandomBase extends Component {
 
     constructor(props) {
         super(props);
-         console.log("xxxxx", props);
         this.ResetData(props);
     }
     
@@ -114,9 +113,7 @@ export default class FlickrRandomBase extends Component {
         if(!this.state.isTest)
             this.FetchData(null);
      }
-
-  
-
+     
 componentDidMount() {
      if(this.state.isTest)
          return;

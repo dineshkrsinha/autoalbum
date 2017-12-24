@@ -11,15 +11,12 @@ export default class FlickrRandomVerbose extends Component {
     
     render()
     {
-    
          return (
             <View>
                 <Text style={{ margin: 8 }}> {this.props.currentImage}/ {this.props.totalImages}</Text>
-
             </View>);
     }  
  }
-  
   
 const styles = StyleSheet.create({
   mycontainer: {

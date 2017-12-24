@@ -14,7 +14,6 @@ export default class FlickrRandomTest extends FlickrRandomBase {
 
     constructor(props) {
         super(props);
-         console.log("xxxxx", props);
     }
     
      componentWillMount() {
