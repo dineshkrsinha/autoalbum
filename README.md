@@ -30,4 +30,9 @@ TestInvalidLink - checks when the link is invalid for expected reponse.
 TestUniqueness - checks to see if the response urls are unique  
 TestWeirdData - checks to see behavior when very long strings and null values are sent  
 TestBandwidth - behavior when bandwidth is limited  
-TestPerfomance-time taken for each fetch  
+TestPerfomance-time taken for each fetch
+
+##**CodeDesign**
+App.js shows how to use the FlickrRandom component
+FlickrRandom functionality is built mostly in FlickrEandomBase. However, when verbose mode is used, the verbose component is fetched from FlickrRandomVerbose sub-component.
+Additionally, when Test option is selected, an inherited class FlickrRandomTest is used. It just builds unit test on top of existing base class.
